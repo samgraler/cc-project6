@@ -188,8 +188,8 @@
       <h1>College Inquiry Chatbot</h1>
       <p>Enter your info to start a short Q&A session. You’ll see your details on the chat page, and you can click sample questions to ask instantly.</p>
       <ul>
-        <li>Ask about programs, tuition, housing, athletics, and more.</li>
-        <li>Responses come from your Dialogflow agent configuration.</li>
+        <li>Ask about athletics, degree programs, tuition, and housing.</li>
+        <li>Responses come from a Dialogflow agent.</li>
         <li>Your info is stored only in your browser session cookie.</li>
       </ul>
     </section>
@@ -208,16 +208,16 @@
         <div class="row">
           <label>
             First name
-            <input name="first_name" type="text" placeholder="Sam" autocomplete="given-name" value="{{ values.first_name if values else '' }}" required />
+            <input name="first_name" type="text" placeholder="John" autocomplete="given-name" value="{{ values.first_name if values else '' }}" required />
           </label>
           <label>
             Last name
-            <input name="last_name" type="text" placeholder="Green" autocomplete="family-name" value="{{ values.last_name if values else '' }}" required />
+            <input name="last_name" type="text" placeholder="Smith" autocomplete="family-name" value="{{ values.last_name if values else '' }}" required />
           </label>
         </div>
         <label>
           Email address
-          <input name="email" type="email" placeholder="sam.green@school.edu" autocomplete="email" value="{{ values.email if values else '' }}" required />
+          <input name="email" type="email" placeholder="test@example.com" autocomplete="email" value="{{ values.email if values else '' }}" required />
         </label>
         <div class="actions">
           <button type="submit">Enter chat</button>

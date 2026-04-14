@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>College Inquiry Chatbot</title>
+    <title>UC College Inquiry Chatbot</title>
     <style>
         :root {
             --bg: #070a12;
@@ -158,6 +158,9 @@
             display: grid;
             grid-template-rows: auto 1fr auto;
             min-height: 640px;
+            /* Prevent panel growth: keep a stable viewport-based height so messages scroll inside #chat-window */
+            height: calc(100vh - 44px);
+            max-height: 860px;
         }
         .chat-header {
             padding: 16px 16px 12px;
@@ -182,6 +185,8 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            /* Required for overflow scrolling inside a CSS grid track */
+            min-height: 0;
         }
         .message {
             max-width: 82%;
@@ -241,7 +246,7 @@
 <div class="app">
     <aside class="card sidebar" aria-label="Student info and suggested questions">
         <div class="brand">
-            <h1>College Inquiry Chatbot</h1>
+            <h1>UC Chatbot</h1>
             <div class="pill">Logged in</div>
         </div>
 
@@ -260,12 +265,11 @@
         <div class="section-title">Suggested questions (click to ask)</div>
         <div class="suggestions">
             <div class="chips">
-                <button class="chip" type="button" onclick="useSuggestion('Does the college have a football team?')">Football team?</button>
-                <button class="chip" type="button" onclick="useSuggestion('Does it offer a Computer Science major?')">CS major?</button>
-                <button class="chip" type="button" onclick="useSuggestion('What is the in-state tuition?')">In-state tuition?</button>
-                <button class="chip" type="button" onclick="useSuggestion('Does it provide on-campus housing?')">On-campus housing?</button>
+                <button class="chip" type="button" onclick="useSuggestion('Does UC have a football team?')">Football team?</button>
+                <button class="chip" type="button" onclick="useSuggestion('Does UC offer a Computer Science major?')">CS major?</button>
+                <button class="chip" type="button" onclick="useSuggestion('What is UC’s in-state tuition?')">In-state tuition?</button>
+                <button class="chip" type="button" onclick="useSuggestion('Does UC provide on-campus housing?')">On-campus housing?</button>
             </div>
-            <div class="meta">These four questions match the assignment examples. Your Dialogflow agent should have intents/responses configured for them.</div>
         </div>
 
         <div class="logout">
@@ -278,14 +282,14 @@
 
     <main class="card chat" aria-label="Chat panel">
         <div class="chat-header">
-            <div class="title">Chat</div>
-            <div class="subtitle">Start by typing “Hello”, then ask one of the suggested questions.</div>
+            <div class="title">UC Chat</div>
+            <div class="subtitle">Ask questions about UC. Start by typing “Hello”, then try one of the suggested questions.</div>
         </div>
         <div id="chat-window">
-            <div class="message bot-msg"><strong>Bot:</strong> Welcome, {{ user.first_name }}! Type "Hello" to begin.</div>
+            <div class="message bot-msg"><strong>UC Bot:</strong> Welcome, {{ user.first_name }}! Type "Hello" to begin.</div>
         </div>
         <div class="input-area">
-            <input type="text" id="user-input" placeholder="Type your question..." onkeypress="handleKeyPress(event)">
+            <input type="text" id="user-input" placeholder="Ask a question about UC..." onkeypress="handleKeyPress(event)">
             <button class="send" onclick="sendMessage()">Send</button>
         </div>
     </main>
