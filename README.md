@@ -24,29 +24,54 @@ If `DIALOGFLOW_PROJECT_ID` is not set, it falls back to the placeholder value in
 1) Create/activate a virtual environment (optional but recommended)
 2) Install dependencies:
 
+**PowerShell (Windows):**
 ```powershell
 pip install -r requirements.txt
+```
+
+**Bash (macOS/Linux, Git Bash, WSL):**
+```bash
+pip3 install -r requirements.txt
 ```
 
 3) If running locally and you want to authenticate with a service account key:
 - Download a service account JSON key from GCP (do **not** commit it; `*.json` is ignored)
 - Set credentials:
 
+**PowerShell (Windows):**
 ```powershell
 $env:GOOGLE_APPLICATION_CREDENTIALS="C:\full\path\to\key.json"
 ```
 
+**Bash (macOS/Linux, Git Bash, WSL):**
+```bash
+export GOOGLE_APPLICATION_CREDENTIALS="/full/path/to/key.json"
+```
+
 4) Set environment variables:
 
+**PowerShell (Windows):**
 ```powershell
-$env:DIALOGFLOW_PROJECT_ID="YOUR_PROJECT_ID"
-$env:FLASK_SECRET_KEY="replace-with-a-long-random-string"
+$env:DIALOGFLOW_PROJECT_ID="intro-to-cc-project-6"
+$env:FLASK_SECRET_KEY="dev-not-for-production"
+```
+
+**Bash (macOS/Linux, Git Bash, WSL):**
+```bash
+export DIALOGFLOW_PROJECT_ID="intro-to-cc-project-6"
+export FLASK_SECRET_KEY="dev-not-for-production"
 ```
 
 5) Run:
 
+**PowerShell (Windows):**
 ```powershell
 python main.py
+```
+
+**Bash (macOS/Linux, Git Bash, WSL):**
+```bash
+python3 main.py
 ```
 
 Then open `http://127.0.0.1:8080`.
