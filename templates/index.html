@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Inquiry Chatbot</title>
+    <style>
+        :root {
+            --bg: #070a12;
+            --panel: rgba(255,255,255,0.06);
+            --panel-2: rgba(255,255,255,0.10);
+            --text: #eef2ff;
+            --muted: rgba(238,242,255,0.72);
+            --border: rgba(255,255,255,0.12);
+            --accent: #38bdf8;
+            --accent-2: #a78bfa;
+            --good: #22c55e;
+            --shadow: 0 18px 60px rgba(0,0,0,0.60);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+            color: var(--text);
+            background:
+                radial-gradient(900px 520px at 20% 15%, rgba(56,189,248,0.18), transparent 55%),
+                radial-gradient(900px 520px at 80% 20%, rgba(167,139,250,0.16), transparent 55%),
+                radial-gradient(900px 520px at 50% 95%, rgba(34,197,94,0.10), transparent 55%),
+                var(--bg);
+            padding: 22px 14px;
+            display: grid;
+            place-items: center;
+        }
+        .app {
+            width: 100%;
+            max-width: 1020px;
+            display: grid;
+            gap: 14px;
+            grid-template-columns: 360px 1fr;
+            align-items: start;
+        }
+        @media (max-width: 980px) {
+            .app { grid-template-columns: 1fr; }
+        }
+        .card {
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            background: linear-gradient(180deg, var(--panel), rgba(255,255,255,0.03));
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        .sidebar {
+            padding: 16px;
+            display: grid;
+            gap: 12px;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.10);
+        }
+        .brand h1 {
+            margin: 0;
+            font-size: 1.05rem;
+            letter-spacing: -0.01em;
+            font-weight: 900;
+        }
+        .pill {
+            padding: 7px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.14);
+            background: rgba(255,255,255,0.06);
+            color: var(--muted);
+            font-weight: 800;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+        .section-title {
+            font-weight: 900;
+            letter-spacing: 0.2px;
+            font-size: 0.92rem;
+            color: rgba(238,242,255,0.86);
+            margin-top: 2px;
+        }
+        .kv {
+            display: grid;
+            gap: 8px;
+        }
+        .kv .row {
+            display: grid;
+            gap: 4px;
+            padding: 10px 12px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.10);
+            background: rgba(255,255,255,0.05);
+        }
+        .k { color: var(--muted); font-size: 0.82rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; }
+        .v { font-weight: 900; color: rgba(238,242,255,0.92); overflow-wrap: anywhere; }
+        .suggestions {
+            display: grid;
+            gap: 10px;
+        }
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .chip {
+            appearance: none;
+            border: 1px solid rgba(255,255,255,0.14);
+            background: rgba(255,255,255,0.06);
+            color: rgba(238,242,255,0.90);
+            padding: 9px 10px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 0.9rem;
+            transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+        }
+        .chip:hover {
+            transform: translateY(-1px);
+            background: rgba(255,255,255,0.10);
+            border-color: rgba(56,189,248,0.35);
+        }
+        .meta {
+            color: rgba(238,242,255,0.55);
+            font-size: 0.88rem;
+            line-height: 1.35;
+        }
+        .logout {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.10);
+        }
+        .logout form { margin: 0; }
+        .btn {
+            appearance: none;
+            border: 1px solid rgba(255,255,255,0.14);
+            background: rgba(255,255,255,0.06);
+            color: rgba(238,242,255,0.92);
+            padding: 10px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 900;
+            letter-spacing: 0.2px;
+            transition: transform 120ms ease, background 120ms ease;
+        }
+        .btn:hover { transform: translateY(-1px); background: rgba(255,255,255,0.10); }
+
+        .chat {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            min-height: 640px;
+        }
+        .chat-header {
+            padding: 16px 16px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.10);
+            background: linear-gradient(135deg, rgba(56,189,248,0.14), rgba(167,139,250,0.10));
+        }
+        .chat-header .title {
+            margin: 0;
+            font-size: 1.15rem;
+            font-weight: 950;
+            letter-spacing: -0.01em;
+        }
+        .chat-header .subtitle {
+            margin-top: 6px;
+            color: rgba(238,242,255,0.68);
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+        #chat-window {
+            padding: 14px 14px 18px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .message {
+            max-width: 82%;
+            padding: 10px 12px;
+            border-radius: 16px;
+            line-height: 1.45;
+            font-size: 0.98rem;
+            border: 1px solid rgba(255,255,255,0.10);
+            background: rgba(255,255,255,0.06);
+        }
+        .bot-msg {
+            align-self: flex-start;
+            background: rgba(255,255,255,0.06);
+        }
+        .user-msg {
+            align-self: flex-end;
+            border-color: rgba(56,189,248,0.25);
+            background: linear-gradient(135deg, rgba(56,189,248,0.22), rgba(167,139,250,0.16));
+        }
+        .input-area {
+            display: flex;
+            gap: 10px;
+            padding: 14px;
+            border-top: 1px solid rgba(255,255,255,0.10);
+            background: rgba(0,0,0,0.10);
+        }
+        input {
+            flex: 1;
+            padding: 12px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.14);
+            background: rgba(255,255,255,0.06);
+            color: var(--text);
+            outline: none;
+        }
+        input:focus {
+            border-color: rgba(56,189,248,0.55);
+            background: rgba(255,255,255,0.085);
+        }
+        .send {
+            min-width: 120px;
+            border: none;
+            cursor: pointer;
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-weight: 950;
+            letter-spacing: 0.2px;
+            color: #06101b;
+            background: linear-gradient(135deg, rgba(56,189,248,1), rgba(167,139,250,1));
+            box-shadow: 0 12px 30px rgba(56,189,248,0.16);
+            transition: transform 120ms ease, filter 120ms ease;
+        }
+        .send:hover { transform: translateY(-1px); filter: brightness(1.03); }
+    </style>
+</head>
+<body>
+<div class="app">
+    <aside class="card sidebar" aria-label="Student info and suggested questions">
+        <div class="brand">
+            <h1>College Inquiry Chatbot</h1>
+            <div class="pill">Logged in</div>
+        </div>
+
+        <div class="section-title">Student information</div>
+        <div class="kv">
+            <div class="row">
+                <div class="k">Name</div>
+                <div class="v">{{ user.first_name }} {{ user.last_name }}</div>
+            </div>
+            <div class="row">
+                <div class="k">Email</div>
+                <div class="v">{{ user.email }}</div>
+            </div>
+        </div>
+
+        <div class="section-title">Suggested questions (click to ask)</div>
+        <div class="suggestions">
+            <div class="chips">
+                <button class="chip" type="button" onclick="useSuggestion('Does the college have a football team?')">Football team?</button>
+                <button class="chip" type="button" onclick="useSuggestion('Does it offer a Computer Science major?')">CS major?</button>
+                <button class="chip" type="button" onclick="useSuggestion('What is the in-state tuition?')">In-state tuition?</button>
+                <button class="chip" type="button" onclick="useSuggestion('Does it provide on-campus housing?')">On-campus housing?</button>
+            </div>
+            <div class="meta">These four questions match the assignment examples. Your Dialogflow agent should have intents/responses configured for them.</div>
+        </div>
+
+        <div class="logout">
+            <div class="meta">Need to switch users?</div>
+            <form method="POST" action="/logout">
+                <button class="btn" type="submit">Log out</button>
+            </form>
+        </div>
+    </aside>
+
+    <main class="card chat" aria-label="Chat panel">
+        <div class="chat-header">
+            <div class="title">Chat</div>
+            <div class="subtitle">Start by typing “Hello”, then ask one of the suggested questions.</div>
+        </div>
+        <div id="chat-window">
+            <div class="message bot-msg"><strong>Bot:</strong> Welcome, {{ user.first_name }}! Type "Hello" to begin.</div>
+        </div>
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Type your question..." onkeypress="handleKeyPress(event)">
+            <button class="send" onclick="sendMessage()">Send</button>
+        </div>
+    </main>
+</div>
+
+<script>
+    const chatWindow = document.getElementById('chat-window');
+    const userInput = document.getElementById('user-input');
+
+    function handleKeyPress(e) {
+        if (e.key === 'Enter') sendMessage();
+    }
+
+    async function sendMessage() {
+        const text = userInput.value.trim();
+        if (!text) return;
+
+        // Add user message to UI
+        addMessage(text, 'user-msg');
+        userInput.value = '';
+
+        try {
+            const response = await fetch('/ask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: text })
+            });
+            const data = await response.json();
+            addMessage(data.reply, 'bot-msg');
+        } catch (error) {
+            addMessage("Error connecting to server.", 'bot-msg');
+        }
+    }
+
+    function useSuggestion(text) {
+        userInput.value = text;
+        userInput.focus();
+    }
+
+    function addMessage(text, className) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message ${className}`;
+        // Using innerHTML so the Bold tags from Dialogflow work
+        msgDiv.innerHTML = text.replace(/\n/g, '<br>'); 
+        chatWindow.appendChild(msgDiv);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+</script>
+
+</body>
+</html>
