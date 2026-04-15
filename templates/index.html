@@ -284,6 +284,13 @@
             </div>
         </div>
 
+        <div class="section-title">Conclude conversation</div>
+        <div class="suggestions">
+            <div class="chips">
+                <button class="chip" type="button" onclick="useSuggestion('Thanks for your help. Goodbye!')">Thanks / Goodbye</button>
+            </div>
+        </div>
+
         <div class="logout">
             <div class="meta">Need to switch users?</div>
             <form method="POST" action="/logout">
@@ -345,7 +352,14 @@
         const msgDiv = document.createElement('div');
         msgDiv.className = `message ${className}`;
         // Using innerHTML so the Bold tags from Dialogflow work
-        msgDiv.innerHTML = text.replace(/\n/g, '<br>'); 
+        const normalized = String(text ?? '')
+            // Dialogflow responses sometimes include literal "\n" sequences
+            .replace(/\\r\\n/g, '\n')
+            .replace(/\\n/g, '\n')
+            // Normalize actual CRLF/CR to LF
+            .replace(/\r\n/g, '\n')
+            .replace(/\r/g, '\n');
+        msgDiv.innerHTML = normalized.replace(/\n/g, '<br>');
         chatWindow.appendChild(msgDiv);
         chatWindow.scrollTop = chatWindow.scrollHeight;
     }
